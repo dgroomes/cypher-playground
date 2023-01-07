@@ -1,0 +1,22 @@
+# version: "3.8"
+# Wait, is the "version" field obsolete because of the Compose Specification? https://docs.docker.com/compose/compose-file/#version-top-level-element
+
+services:
+
+  postgres:
+    # https://hub.docker.com/r/apache/age
+    image: apache/age:v1.1.0
+    # Apache AGE does not have an arm64 image.
+    platform: linux/amd64
+    environment:
+      # See PostgreSQL documentation about "trust":
+      # https://www.postgresql.org/docs/current/auth-trust.html
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: bind
+        source: ./postgres-init/
+        # This is a special directory that the Postgres Docker image refers to right when it starts up. You can use it
+        # to initialize the database with tables and data.
+        target: /docker-entrypoint-initdb.d

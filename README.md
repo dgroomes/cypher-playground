@@ -95,6 +95,20 @@ Follow these instructions to get up and running with a graph database, some samp
      ```
 
 
+## Wish List
+
+General clean-ups, TODOs and things I wish to implement for this project:
+
+* [ ] Add a Java client to the project.
+* [ ] What does it mean that AGE supports hybrid SQL-cypher querying? I know technically that's what I already have but
+  it's just a `select * from`; it's a no-op. What is a more interesting example?  
+* [ ] Is there any way to port an existing relational table to a graph? Even if it is a hacky way to do it, I'd like to
+  prove that you don't need to throw away your existing hard-earned data and modelling to adopt the graph way.
+* [ ] Consider building from source; might not be worth it.
+* [ ] Use the Apache AGE Viewer to visualize the graph.
+* [ ] Consider bringing in more interesting and bigger example data. Consider the ZIP code data of my other projects. 
+
+
 ## Reference
 
 * [openCypher GitHub repository](https://github.com/opencypher/openCypher)

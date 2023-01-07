@@ -34,6 +34,8 @@ acronym for "A Graph Extension". AGE is very promising because it is tied to Pos
 it reached a 1.0 release in 2022 and it is under the Apache umbrella (another sign of durability). The project has good
 momentum. Plus it has a Java client. I'll use AGE for this playground repository.
 
+This playground repository is effectively a playground for both Cypher and Apache AGE.
+
 
 ### Forward Looking: GQL
 
@@ -95,13 +97,29 @@ Follow these instructions to get up and running with a graph database, some samp
      ```
 
 
+## Notes
+
+The [AGE manual](https://age.apache.org/age-manual) is great. Here some quotes.
+
+> Cypher uses a Postgres namespace for every individual graph. It is recommended that no DML or DDL commands are
+> executed in the namespace that is reserved for the graph.
+
+> AGE uses a custom data type called agtype, which is the only data type returned by AGE. Agtype is a superset of Json
+> and a custom implementation of JsonB.
+
+> Cypher cannot be used in an expression, the query must exists in the FROM clause of a query. However, if the cypher
+> query is placed in a Subquery, it will behave as any SQL style query.
+
+
 ## Wish List
 
 General clean-ups, TODOs and things I wish to implement for this project:
 
 * [ ] Add a Java client to the project.
-* [ ] What does it mean that AGE supports hybrid SQL-cypher querying? I know technically that's what I already have but
-  it's just a `select * from`; it's a no-op. What is a more interesting example?  
+* [x] DONE What does it mean that AGE supports hybrid SQL-cypher querying? I know technically that's what I already have but
+  it's just a `select * from`; it's a no-op. What is a more interesting example?
+  * The [*AGE beyond Cypher*](https://age.apache.org/age-manual/master/advanced/advanced_overview.html) section of the
+    docs gets into it. Update: ok I kind of get it.
 * [ ] Is there any way to port an existing relational table to a graph? Even if it is a hacky way to do it, I'd like to
   prove that you don't need to throw away your existing hard-earned data and modelling to adopt the graph way.
 * [ ] Consider building from source; might not be worth it.

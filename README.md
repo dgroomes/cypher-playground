@@ -155,7 +155,7 @@ General clean-ups, TODOs and things I wish to implement for this project:
 
 * [ ] Consider building from source; might not be worth it.
 * [ ] Use the Apache AGE Viewer to visualize the graph.
-* [ ] Bring in an interesting set of example data as *relational data*. Consider the ZIP code data of my other projects.
+* [ ] IN PROGRESS Bring in an interesting set of example data as *relational data*. Consider the ZIP code data of my other projects.
   * [My other project `dgroomes/mongodb-playground`](https://github.com/dgroomes/mongodb-playground) has ZIP data. I'll
     bring it to this project here and import it maybe as CSV?
 * [ ] Write a relational-to-graph migration program to port the data from relational SQL tables to an AGE graph. This

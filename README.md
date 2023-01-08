@@ -120,11 +120,22 @@ General clean-ups, TODOs and things I wish to implement for this project:
   it's just a `select * from`; it's a no-op. What is a more interesting example?
   * The [*AGE beyond Cypher*](https://age.apache.org/age-manual/master/advanced/advanced_overview.html) section of the
     docs gets into it. Update: ok I kind of get it.
-* [ ] Is there any way to port an existing relational table to a graph? Even if it is a hacky way to do it, I'd like to
+* [x] DONE Is there any way to port an existing relational table to a graph? Even if it is a hacky way to do it, I'd like to
   prove that you don't need to throw away your existing hard-earned data and modelling to adopt the graph way.
+   * No, there isn't any mechanism in AGE to do this. [The recommended workaround is to indeed roll your own migration](https://github.com/apache/age/issues/289#issuecomment-1244135270)
+     but this subject is on the radar of the AGE project. And indeed we should expect this functionality because the
+     above-the-fold marketing content on [the Apache AGE home page](https://age.apache.org/) says the following.
+
+     > Through Apache AGE, PostgreSQL users will gain access to graph query modeling within the existing relational database.
+   
+   * The word "existing" suggests existing *data* in the way I read it. But now I see that it is making the selling
+     point that you can use you existing database *technology* (e.g. Postgres, and in the future MySQL, etc.). 
+
 * [ ] Consider building from source; might not be worth it.
 * [ ] Use the Apache AGE Viewer to visualize the graph.
-* [ ] Consider bringing in more interesting and bigger example data. Consider the ZIP code data of my other projects. 
+* [ ] Consider bringing in more interesting and bigger example data. Consider the ZIP code data of my other projects.
+  * [My other project `dgroomes/mongodb-playground`](https://github.com/dgroomes/mongodb-playground) has ZIP data. I'll
+    bring it to this project here and import it maybe as CSV? 
 
 
 ## Reference

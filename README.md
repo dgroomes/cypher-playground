@@ -2,7 +2,7 @@
 
 NOT YET FULLY IMPLEMENTED
 
-📚 Learning and exploring the Cypher query language for graph databases.
+📚 Learning and exploring the Cypher query language for graph databases like Apache AGE.
 
 > Cypher is a declarative graph query language that allows for expressive and efficient data querying in a property
 > graph.
@@ -10,7 +10,29 @@ NOT YET FULLY IMPLEMENTED
 > -- <cite> https://en.wikipedia.org/wiki/Cypher_(query_language) </cite>
 
 
+> Apache AGE:
+> Graph Processing & Analytics for RDBs
+> 
+> -- <cite> https://age.apache.org/ </cite>
+
+
 ## Overview
+
+This project explores the ergonomics of evolving an existing relational data model to a graph model. Specifically, we
+explore migrating existing relational data in a Postgres database to an [Apache AGE](https://age.apache.org/) graph model
+in the same Postgres database. We want to answer these questions:
+
+1. What is the developer experience of Cypher?
+   * How do Cypher queries compare to SQL queries? I expect recursive queries to be the main draw of Cypher. But what
+     are the awkward parts of Cypher? 
+2. What is the data migration story for Apache AGE?
+   * What tools does Apache AGE offer to migrate existing relational data to a graph model? And better yet, can we skip
+     a migration altogether? Meaning, can we write Cypher queries over relational data? (The answer is no; but I know
+     Apache AGE is rapidly evolving and is strategically invested in relational databases, so I'm hopeful that this area
+     enriches over time).
+
+
+## Background
 
 I'm interested in learning graph-based query languages. While I love SQL, the ability to express a pattern-matching
 query over a graph of data and get a serialized "object graph" response is something I often pine for when I'm otherwise
@@ -22,14 +44,14 @@ of which have cemented a lead. Still, there is a lot of activity in the space.
 
 GQL (Graph Query Language) is a standards-body proposed graph query language heavily inspired by Cypher but it is not
 yet a real thing. Cypher™️ *proper* is actually a Neo4J-specific language. Neo4J graciously supported an open
-specification called *openCypher* which is basically Cypher but it it meant to be implemented by different vendors and
+specification called *openCypher* which is basically Cypher but it is meant to be implemented by different vendors and
 open source projects. openCypher is what I am exploring in this playground repository.
 
 
 ### Apache AGE
 
-For this project, I have to choose a database that supports openCypher. [Apache AGE](https://age.incubator.apache.org/)
-is a Postgres extension that brings graph capabilities to the very mature and wildly popular Postgres database. AGE is an
+For this project, I have to choose a database that supports openCypher. [Apache AGE](https://age.apache.org/) is a
+Postgres extension that brings graph capabilities to the very mature and wildly popular Postgres database. AGE is an
 acronym for "A Graph Extension". AGE is very promising because it is tied to Postgres (a sign of stability and maturity),
 it reached a 1.0 release in 2022 and it is under the Apache umbrella (another sign of durability). The project has good
 momentum. Plus it has a Java client. I'll use AGE for this playground repository.
@@ -133,9 +155,16 @@ General clean-ups, TODOs and things I wish to implement for this project:
 
 * [ ] Consider building from source; might not be worth it.
 * [ ] Use the Apache AGE Viewer to visualize the graph.
-* [ ] Consider bringing in more interesting and bigger example data. Consider the ZIP code data of my other projects.
+* [ ] Bring in an interesting set of example data as *relational data*. Consider the ZIP code data of my other projects.
   * [My other project `dgroomes/mongodb-playground`](https://github.com/dgroomes/mongodb-playground) has ZIP data. I'll
-    bring it to this project here and import it maybe as CSV? 
+    bring it to this project here and import it maybe as CSV?
+* [ ] Write a relational-to-graph migration program to port the data from relational SQL tables to an AGE graph. This
+  program should not be generic. It should be specific to the data I'm working with.
+* [ ] Write some Cypher queries over the graph data. They should engage the cyclic nature of the graph data. Also write
+  some aggregation queries which should not engage the cyclic nature of the graph data. I'm talking about "find objects
+  that relate to objects that look like XYZ" and then "sum up the numeric field ABC and find the top 10 results". I want
+  to compare and contrast Cypher with SQL but be fair and give them challenges that they are suited to.  
+* [ ] Write SQL queries over the graph data. They should engage the cyclic nature of the data.
 
 
 ## Reference

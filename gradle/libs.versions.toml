@@ -1,0 +1,10 @@
+[versions]
+logback = "1.4.5" # Logback releases: https://logback.qos.ch/news.html
+jackson = "2.14.1" # Jackson releases: https://github.com/FasterXML/jackson/wiki/Jackson-Releases
+postgres-jdbc = "42.5.1" # Postgres JDBC releases: https://jdbc.postgresql.org/download/
+
+[libraries]
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+postgres-jdbc = { module = "org.postgresql:postgresql", version.ref = "postgres-jdbc" }

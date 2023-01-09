@@ -31,6 +31,33 @@ in the same Postgres database. We want to answer these questions:
      Apache AGE is rapidly evolving and is strategically invested in relational databases, so I'm hopeful that this area
      enriches over time).
 
+This project uses US geographies as its data domain. Specifically, we'll model ZIP codes, their containing city and
+their containing state. This creates a tree-like structure. This data model is not complex enough to warrant a graph
+data model so let's make it more interesting and also model "state adjacencies". For example, Minnesota neighbors
+Wisconsin.
+
+This project uses Docker to run a Postgres database pre-installed with Apache AGE.
+
+This project defines a multi-module Gradle project that defines Java programs that load the initial domain data, migrate
+the data from a relational state to a graph state, and query the data.
+
+Here is a breakdown of the components of this project:
+
+* `docker-compose.yml` and `postgres-init/`
+   * This is the Docker-related stuff. The Docker Compose file defines the Postgres container and mounts the `postgres-init/`
+     directory into the container. The `postgres-init/` directory contains the SQL scripts that initialize the database
+     with the relational schema and the US state data.
+* `data-loader/`
+    * `data-loader/` is a Gradle module. It defines a Java program that loads the ZIP code and city data from the
+      `zips.jsonl` file.
+* `data-migrator/`
+    * NOT YET IMPLEMENTED
+    * `data-migrator/` is a Gradle module. It defines a Java program that migrates the relational data to a graph data
+      model.
+* `data-queryer/`
+    * NOT YET IMPLEMENTED
+    * `data-queryer/` is a Gradle module. It defines a Java program that queries the graph data using Cypher.
+
 
 ## Background
 
@@ -76,44 +103,28 @@ Follow these instructions to get up and running with a graph database, some samp
    * ```shell
      docker-compose up --detach
      ```
-3. Start a psql session.
+   * As part of the startup procedure, the relational schema is created and the US state data gets loaded.  
+3. Load the ZIP code and city data.
    * ```shell
-     docker exec --interactive --tty cypher-playground-postgres-1 psql --username postgres
+     ./gradlew :data-loader:run
      ```
-4. Create a sample graph.
-   * ```sql
-     SELECT create_graph('my_graph');
-     ```
-   * Note: this is following the [*Quick Start* instructions in the Apache AGE README](https://github.com/apache/age#quick-start).
-5. Create a vertex.
-   * ```sql
-     SELECT *
-     FROM cypher('my_graph', $$
-         CREATE (n)
-     $$) as (v agtype);     
-     ```
-   * Yes, it is verbose. This is because the Cypher query is embedded in a SQL query.
-6. Query the graph
-   * ```sql
-     SELECT * FROM cypher('my_graph', $$
-     MATCH (v)
-     RETURN v
-     $$) as (v agtype);
-     ```
-   * It returns a serialized graph object. Interestingly, it is embedded in a regular table-style result set because we
-     are operating in a traditional psql and relational context. Altogether, the query and result  looks like the
-     following.
+   * It will look something like the following.
    * ```text
-     postgres=# SELECT * FROM cypher('my_graph', $$
-     postgres$# MATCH (v)
-     postgres$# RETURN v
-     postgres$# $$) as (v agtype);
-                                    v
-     ----------------------------------------------------------------
-      {"id": 281474976710657, "label": "", "properties": {}}::vertex
-     (1 row)
+     00:19:46 [main] INFO  dataloader.Main - Loading ZIP code data from the local file into Postgres ...
+     00:20:22 [main] INFO  dataloader.Main - Loaded 25,701 cities and 29,353 ZIP codes.
      ```
-7. When you're done, stop the database.
+4. Migrate the relational data to a graph model.
+   * NOT YET IMPLEMENTED
+   * ```shell
+     ./gradlew :data-migrator:run
+     ```
+5. Query the graph data.
+   * NOT YET IMPLEMENTED
+   * ```shell
+     ./gradlew :data-queryer:run
+     ```
+   * Read the Java source code to understand the Cypher queries.
+6. When you're done, stop the database.
    * ```shell
      docker-compose down
      ```
@@ -121,7 +132,7 @@ Follow these instructions to get up and running with a graph database, some samp
 
 ## Notes
 
-The [AGE manual](https://age.apache.org/age-manual) is great. Here some quotes.
+The [AGE manual](https://age.apache.org/age-manual) is great. Here are some quotes.
 
 > Cypher uses a Postgres namespace for every individual graph. It is recommended that no DML or DDL commands are
 > executed in the namespace that is reserved for the graph.
@@ -155,7 +166,7 @@ General clean-ups, TODOs and things I wish to implement for this project:
 
 * [ ] Consider building from source; might not be worth it.
 * [ ] Use the Apache AGE Viewer to visualize the graph.
-* [ ] IN PROGRESS Bring in an interesting set of example data as *relational data*. Consider the ZIP code data of my other projects.
+* [x] DONE Bring in an interesting set of example data as *relational data*. Consider the ZIP code data of my other projects.
   * [My other project `dgroomes/mongodb-playground`](https://github.com/dgroomes/mongodb-playground) has ZIP data. I'll
     bring it to this project here and import it maybe as CSV?
 * [ ] Write a relational-to-graph migration program to port the data from relational SQL tables to an AGE graph. This
@@ -165,6 +176,10 @@ General clean-ups, TODOs and things I wish to implement for this project:
   that relate to objects that look like XYZ" and then "sum up the numeric field ABC and find the top 10 results". I want
   to compare and contrast Cypher with SQL but be fair and give them challenges that they are suited to.  
 * [ ] Write SQL queries over the graph data. They should engage the cyclic nature of the data.
+* [ ] This isn't related to Cypher or AGE at all, but I'd like to maybe do a stored procedure so I can load the data in
+  a batch. Right now the bottleneck is that I need to do a full round trip just to insert one city and get its surrogate
+  key. I know Hibernate's trick is that it generates its own keys instead of letting Postgres do it. I think it locks
+  onto a block range of keys or something? I suppose that's clever.
 
 
 ## Reference

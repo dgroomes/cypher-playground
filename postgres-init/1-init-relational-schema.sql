@@ -1,9 +1,4 @@
--- Initialize a relational schema.
---
--- We are going to use US geographic data as the domain. Specifically, we'll model ZIP codes, their containing city and
--- their containing state. This creates a tree-like structure. This data model is not complex enough to warrant a graph
--- data model so let's make it more interesting and a "state adjacencies" table which describes which states are adjacent
--- to each other.
+-- Initialize the relational schema.
 
 -- States have a natural primary key, which is the state abbreviation.
 create table states (state_code char(2) primary key, state_name text not null);
